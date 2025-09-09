@@ -111,13 +111,17 @@ resource "aws_db_proxy" "main" {
   vpc_subnet_ids         = var.private_subnet_ids
   vpc_security_group_ids = [var.database_security_group_id]
 
-  target {
-    db_instance_identifier = aws_db_instance.main.identifier
-  }
-
   tags = {
     Name = "${var.project_name}-${var.environment}-db-proxy"
   }
+}
+
+# RDS Proxy Target
+resource "aws_db_proxy_target" "main" {
+  count = var.enable_rds_proxy ? 1 : 0
+
+  db_proxy_name          = aws_db_proxy.main[0].name
+  db_instance_identifier = aws_db_instance.main.identifier
 }
 
 # Secrets Manager for RDS Proxy (if enabled)
