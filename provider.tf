@@ -11,7 +11,7 @@ terraform {
   backend "s3" {
     bucket         = "portfolio-dev-terraform-state"
     key            = "terraform/state"
-    region         = "us-east-1"
+    region         = "eu-west-1"
     encrypt        = true
     dynamodb_table = "portfolio-dev-terraform-lock"
   }
