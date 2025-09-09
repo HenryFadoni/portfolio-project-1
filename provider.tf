@@ -9,11 +9,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "your-terraform-state-bucket"
+    bucket         = "portfolio-dev-terraform-state"
     key            = "terraform/state"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "terraform-state-lock"
+    dynamodb_table = "portfolio-dev-terraform-lock"
   }
 }
 
