@@ -25,7 +25,7 @@ export AWS_SECRET_ACCESS_KEY="your-secret-key"
 
 ### 1. Create S3 Bucket
 ```bash
-aws s3 mb s3://portfolio-dev-terraform-state --region eu-west-1
+aws s3 mb s3://portfolio-dev-terraform-state --region us-east-1
 ```
 
 ### 2. Enable Versioning
@@ -65,7 +65,7 @@ aws dynamodb create-table \
     --attribute-definitions AttributeName=LockID,AttributeType=S \
     --key-schema AttributeName=LockID,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
-    --region eu-west-1
+    --region us-east-1
 ```
 
 ## Option 3: AWS Console
@@ -107,5 +107,5 @@ terraform plan
 - Try adding a random suffix: `portfolio-dev-terraform-state-12345`
 
 ### Region Mismatch
-- Ensure the bucket is created in `eu-west-1` (as specified in provider.tf)
+- Ensure the bucket is created in `us-east-1` (as specified in provider.tf)
 - Or update the region in provider.tf to match your preferred region

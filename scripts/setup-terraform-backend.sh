@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-AWS_REGION="eu-west-1"
+AWS_REGION="us-east-1"
 PROJECT_NAME="portfolio"
 ENVIRONMENT="dev"
 BUCKET_NAME="${PROJECT_NAME}-${ENVIRONMENT}-terraform-state-$(date +%s)"

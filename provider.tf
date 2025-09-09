@@ -9,9 +9,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "portfolio-dev-terraform-state"
+    bucket         = "portfolio-henry-fadoni-dev-terraform-state"
     key            = "terraform/state"
-    region         = "eu-west-1"
+    region         = "us-east-1"
     encrypt        = true
     dynamodb_table = "portfolio-dev-terraform-lock"
   }
