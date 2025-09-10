@@ -206,10 +206,10 @@ jobs:
       run: |
         echo "Deploying to ECS with image: ${{ needs.build.outputs.image-uri }}"
         
-        # Try to get current task definition, create a simple one if it doesn't exist
+        # Try to get current task definition and filter out read-only fields
         aws ecs describe-task-definition \
           --task-definition $ECS_SERVICE \
-          --query taskDefinition > task-definition.json 2>/dev/null || \
+          --query 'taskDefinition.{family:family,networkMode:networkMode,requiresCompatibilities:requiresCompatibilities,cpu:cpu,memory:memory,executionRoleArn:executionRoleArn,taskRoleArn:taskRoleArn,containerDefinitions:containerDefinitions}' > task-definition.json 2>/dev/null || \
         cat > task-definition.json << 'TASKEOF'
         {
           "family": "$ECS_SERVICE",
@@ -243,6 +243,10 @@ jobs:
         }
         TASKEOF
 
+        # Update the container image in the task definition
+        jq --arg image "${{ needs.build.outputs.image-uri }}" '.containerDefinitions[0].image = $image' task-definition.json > task-definition-updated.json
+        mv task-definition-updated.json task-definition.json
+
         # Register new task definition
         NEW_TASK_DEF=$(aws ecs register-task-definition \
           --cli-input-json file://task-definition.json \
@@ -250,20 +254,19 @@ jobs:
         
         echo "New task definition: $NEW_TASK_DEF"
         
-        # Update or create ECS service
+        # Update ECS service
         aws ecs update-service \
           --cluster $ECS_CLUSTER \
-          --service $ECS_SERVICE \
+          --service portfolio-dev-service \
           --task-definition $NEW_TASK_DEF \
-          --force-new-deployment 2>/dev/null || \
-        echo "Service update failed - may need to create service first"
+          --force-new-deployment
 
     - name: Wait for deployment
       run: |
         echo "Waiting for ECS service to stabilize..."
         aws ecs wait services-stable \
           --cluster $ECS_CLUSTER \
-          --services $ECS_SERVICE \
+          --services portfolio-dev-service \
           --cli-read-timeout 600 || \
         echo "Service stabilization timeout - continuing"
 
