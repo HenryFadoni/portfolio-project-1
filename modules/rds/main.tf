@@ -89,7 +89,7 @@ resource "aws_db_instance" "main" {
 
 # CloudWatch Log Group for RDS
 resource "aws_cloudwatch_log_group" "rds" {
-  name              = "/aws/rds/instance/${aws_db_instance.main.identifier}/postgresql"
+  name              = "/aws/rds/instance/${aws_db_instance.main.identifier}/postgresql-${var.environment}"
   retention_in_days = 30
 
   tags = {
