@@ -9,8 +9,8 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: portfolio-app
-  ECS_SERVICE: portfolio-dev-service
-  ECS_CLUSTER: portfolio-dev-cluster
+  ECS_SERVICE: portfolio-dev-task
+  ECS_CLUSTER: main-cluster
   CONTAINER_NAME: portfolio-app
 
 jobs:
